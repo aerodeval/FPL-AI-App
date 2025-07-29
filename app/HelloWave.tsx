@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, Text } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -7,8 +7,9 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { ThemedText } from '@/components/ThemedText';
+// import { ThemedText } from '@/components/ThemedText';
 
 export function HelloWave() {
   const rotationAnimation = useSharedValue(0);
@@ -25,16 +26,29 @@ export function HelloWave() {
   }));
 
   return (
-    <Animated.View style={animatedStyle}>
-      <ThemedText style={styles.text}>👋</ThemedText>
-    </Animated.View>
+    <SafeAreaView>
+    <Animated.View style={styles.container}>
+      <Text style={styles.heading}> Jhaat ke baal katne wali app</Text>
+      <Pressable>
+        <Text>Book Now </Text></Pressable>
+    </Animated.View></SafeAreaView>
   );
 }
 
+
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 28,
-    lineHeight: 32,
-    marginTop: -6,
-  },
-});
+
+  container:{ flexDirection:'column',
+    height:50,
+    backgroundColor:"yellow"
+
+  }
+,
+  heading:{
+fontSize:30
+  }
+
+
+})
+
+
