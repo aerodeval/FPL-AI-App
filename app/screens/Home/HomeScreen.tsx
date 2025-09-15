@@ -10,7 +10,7 @@ export default function HomeScreen(){
         async function loadData() {
           try {
             const data = await getFplData();
-            const elements = Array.isArray(data?.elements) ? data.elements : [];
+            const elements = Array.isArray(data?.elements) ? data.elements.slice(0,5) : [];
             setPlayers(elements);
           } catch (err) {
             console.error(err);
@@ -24,12 +24,12 @@ export default function HomeScreen(){
     if (loading) return <ActivityIndicator size="large" />;
 
     return(
-        <View className="flex-1 justify-center items-center">
+        <View className="flex-1 justify-center items-center ">
             <FlatList
               data={players}
               keyExtractor={(item) => String(item.id)}
               renderItem={({ item }) => (
-                <View>
+                <View >
                 <Text>{item.web_name}</Text>
                 {item.opta_code ? (
                   <Image
