@@ -1,4 +1,4 @@
-async function fetchJson(api){
+export async function fetchJson(api){
 
     try {
     const res = await fetch(api);

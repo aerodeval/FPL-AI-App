@@ -1,9 +1,11 @@
+import { FplService } from "@/app/api/fplService";
 import { getFplData } from "@/app/services/api";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, ScrollView, Text, View } from "react-native";
 
 export default function HomeScreen(){
     const [players,setPlayers]=useState<any[]>([]);
+    const [fixture,setFixtureData]=useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -19,6 +21,13 @@ export default function HomeScreen(){
           }
         }
         loadData();
+
+
+        const load = async () => {
+          const merged = await FplService.getFixtureData();
+          setFixtureData(merged.slice(0, 20)); // first 20 players
+        };
+        load();
       }, []);
 
     if (loading) return <ActivityIndicator size="large" />;
@@ -42,5 +51,16 @@ export default function HomeScreen(){
                 </View>
               )}
             />
+
+<ScrollView style={{ padding: 10 }}>
+      {fixture.map((f) => (
+        <Text key={f.id} style={{ marginBottom: 6 }}>
+          {new Date(f.kickoff_time).toLocaleString()} {"\n"}
+          {f.finished
+            ? `${f.team_h_score} - ${f.team_a_score}`
+            : "Not started yet"}
+        </Text>
+      ))}
+    </ScrollView>
         </View>
     )}
