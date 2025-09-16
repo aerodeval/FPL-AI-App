@@ -33,4 +33,17 @@ app.get("/api/fixtures", async (req, res) => {
   }
 });
 
+app.get("/api/userdata/:team_id", async (req, res) => {
+  try {
+    const { team_id } = req.params;  // <-- dynamic param from URL
+
+    const response = await fetch(`https://fantasy.premierleague.com/api/entry/${team_id}/`);
+    const data = await response.json();
+
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch user data" });
+  }
+});
+
 app.listen(5000, () => console.log("Server running on port 5000"));
