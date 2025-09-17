@@ -33,7 +33,7 @@ app.get("/api/fixtures", async (req, res) => {
   }
 });
 
-app.get("/api/userdata/:team_id", async (req, res) => {
+app.get("/api/entry/:team_id", async (req, res) => {
   try {
     const { team_id } = req.params;  // <-- dynamic param from URL
 
@@ -43,6 +43,20 @@ app.get("/api/userdata/:team_id", async (req, res) => {
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch user data" });
+  }
+});
+
+
+app.get("/api/leagues-classic/:league_id/standings/", async (req, res) => {
+  try {
+    const { league_id } = req.params;  // <-- dynamic param from URL
+
+    const response = await fetch(`https://fantasy.premierleague.com/api/leagues-classic/${league_id}/standings/`);
+    const data = await response.json();
+
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch League data" });
   }
 });
 

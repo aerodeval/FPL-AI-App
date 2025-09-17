@@ -1,7 +1,6 @@
 import { FplService } from "@/app/api/fplService";
-import { getFplData } from "@/app/services/api";
 import { useQuery } from "@tanstack/react-query";
-import { Key, useEffect, useState } from "react";
+import { Key, useState } from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -10,7 +9,7 @@ import {
 } from "react-native";
 
 export default function HomeScreen() {
-  const [players, setPlayers] = useState<any[]>([]);
+
   const [loading, setLoading] = useState(true);
 
   // Fetch fixtures with React Query
@@ -24,24 +23,7 @@ export default function HomeScreen() {
     staleTime: 1000*6*8
   });
 
-  // Fetch players manually
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const data = await getFplData();
-        const elements = Array.isArray(data?.elements)
-          ? data.elements.slice(0, 5)
-          : [];
-        setPlayers(elements);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadData();
-  }, []);
-
+ 
   if (loading || fixturesLoading) return <ActivityIndicator size="large" />;
   if (fixturesError) return <Text>Error loading fixtures</Text>;
 

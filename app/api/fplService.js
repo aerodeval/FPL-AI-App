@@ -9,6 +9,15 @@ export const FplService = {
 
     getFixtureData: async () =>{
          return fetchJson(`${commonUrl}/fixtures`)
-    }
+    },
+
+    getEntryData: async (userId) =>{
+        return fetchJson(`${commonUrl}/entry/${userId}`)
+   },
+
+   getTeamData: async (leagueId)=>{
+    return fetchJson(`${commonUrl}/leagues-classic/${leagueId}/standings`)
+   }
+
 
 };
