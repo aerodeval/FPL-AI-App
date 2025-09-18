@@ -40,7 +40,7 @@ export default function TeamScreen() {
             <Text>{item.name}</Text>
             <Button   onPress={() => router.push({
                 pathname: "/screens/LeaguePlayers/[teamId]",
-                params: { teamId: item.id },
+                params: { teamId: item.id, userId: userData?.id },
               })
               }> View</Button>
           </View>

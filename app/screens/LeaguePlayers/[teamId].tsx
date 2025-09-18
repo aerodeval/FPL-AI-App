@@ -1,13 +1,13 @@
 import { FplService } from "@/app/api/fplService";
 import { Button } from "@react-navigation/elements";
 import { useQuery } from "@tanstack/react-query";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TeamId() {
-  const { teamId } = useLocalSearchParams();
+  const { teamId, userId } = useLocalSearchParams();
   const {
     data: teamData,
     isLoading: teamLoading,
@@ -17,6 +17,20 @@ export default function TeamId() {
     queryFn: () => FplService.getTeamData(teamId),
     staleTime: 1000 * 6 * 8,
   });
+
+
+
+      const {
+        data: userData,
+        isLoading: userLoading,
+        error: userError,
+      } = useQuery({
+        queryKey: ["userData", userId],
+        queryFn: () => FplService.getEntryData(userId),
+        staleTime: 1000 * 6 * 8,
+      });
+ 
+
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -33,7 +47,11 @@ export default function TeamId() {
           <Text style={styles.cardText}>Total Points: {player?.total}</Text>
           <Text style={styles.cardText}>GW Points: {player?.event_total}</Text></View>
 
-          <Button>View Team</Button>
+          <Button   onPress={() => router.push({
+                pathname: "/screens/TeamPlayers/[teamPlayers]",
+                params: { teamPlayers: `${player?.entry}-${userData?.current_event}`, team_id: player?.entry, gw_id: userData?.current_event },
+              })
+              }> View</Button>
           </View>
      
       ))}

@@ -60,4 +60,22 @@ app.get("/api/leagues-classic/:league_id/standings/", async (req, res) => {
   }
 });
 
+app.get("/api/entry/:team_id/event/:gw_id/picks", async (req, res) => {
+  try {
+    const { team_id,gw_id } = req.params;  // <-- dynamic param from URL
+
+    const response = await fetch(`https://fantasy.premierleague.com/api/entry/${team_id}/event/${gw_id}/picks/`);
+    const data = await response.json();
+
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch League data" });
+  }
+});
+
+
+
+
+
+
 app.listen(5000, () => console.log("Server running on port 5000"));

@@ -18,6 +18,11 @@ export const FplService = {
    getTeamData: async (leagueId)=>{
     return fetchJson(`${commonUrl}/leagues-classic/${leagueId}/standings`)
    }
+,
+   getTeamPlayers: async (team_id,gw_id)=>{
+    return fetchJson(`${commonUrl}/entry/${team_id}/event/${gw_id}/picks`)
+   }
+
 
 
 };
