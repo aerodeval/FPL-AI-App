@@ -25,7 +25,7 @@ export default function TeamScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-    <ScrollView style={{ flex: 1, paddingHorizontal: 12 }}>
+    <ScrollView style={{ flex: 1, paddingHorizontal: 12,}}>
   <Text  className="text-lg my-1">
               Team Name: {userData?.name}
 

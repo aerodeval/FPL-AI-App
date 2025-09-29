@@ -87,19 +87,19 @@ export default function TeamPlayers() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 20}}>
         <Text style={styles.header}>
           Entry: {normalizedTeamId} | GW: {normalizedGwId}
         </Text>
 
+        <View  style={styles.Mainteam}>
+<View style={styles.startingxi}>
         {/* Formation */}
         {renderLine(gk)}
         {renderLine(def)}
         {renderLine(mid)}
         {renderLine(att)}
-
-        {/* Bench */}
-        <Text style={styles.subHeader}>Bench</Text>
+        </View>
         <View style={styles.bench}>
           {bench.map((p) => {
             const details = getPlayerDetails(p);
@@ -116,7 +116,7 @@ export default function TeamPlayers() {
               </View>
             );
           })}
-        </View>
+        </View></View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -129,11 +129,13 @@ const styles = StyleSheet.create({
   subHeader: { fontSize: 16, marginTop: 20, marginBottom: 8 },
   line: { flexDirection: "row", justifyContent: "center", marginVertical: 8 },
   player: { alignItems: "center", marginHorizontal: 6 },
-  playerImage: { width: 60, height: 80, borderRadius: 4, backgroundColor: "#ddd" },
+  playerImage: { minWidth: 60, height: 80, borderRadius: 4, backgroundColor: "#ddd" },
   playerName: { fontSize: 12, textAlign: "center" },
   playerPoints: { fontSize: 11, color: "#333" },
-  bench: { flexDirection: "row", justifyContent: "space-around", marginTop: 10 },
+  bench: { flexDirection: "row", justifyContent: "space-around", backgroundColor:"#333", borderRadius:15, padding:15 },
   benchPlayer: { alignItems: "center" },
   benchImage: { width: 50, height: 70, borderRadius: 4 },
   benchName: { fontSize: 10, color: "#666" },
+  Mainteam: {backgroundColor: "#019C44" , borderRadius:15,},
+  startingxi:{ paddingLeft:15,paddingRight:15}
 });
