@@ -2,8 +2,10 @@
 import { FplService } from "@/app/api/fplService";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Key } from "react";
+import { Image, ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import BannerButton from './../../components/BannerButton';
 
 const elementTypes = {
   1: "goalkeeper",
@@ -77,8 +79,10 @@ export default function TeamPlayers() {
               resizeMode="contain"
               onError={() => console.log("Image failed:", imageUrl)}
             />
+            <View style={styles.playerDetail}>
             <Text style={styles.playerName}>{details.web_name}</Text>
             <Text style={styles.playerPoints}>GW: {details.event_points}</Text>
+          </View>
           </View>
         );
       })}
@@ -88,23 +92,34 @@ export default function TeamPlayers() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{ paddingBottom: 20}}>
-        <Text style={styles.header}>
+        {/* <Text style={styles.header}>
           Entry: {normalizedTeamId} | GW: {normalizedGwId}
-        </Text>
+        </Text> */}
 
-        <View  style={styles.Mainteam}>
+    <BannerButton></BannerButton>
+
+    <View style={styles.myTeam}>
 <View style={styles.startingxi}>
+<ImageBackground
+        source={require("../../../assets/images/pitch.png")}  
+        style={styles.Mainteam}
+        resizeMode="contain"
+      >
         {/* Formation */}
-        {renderLine(gk)}
-        {renderLine(def)}
-        {renderLine(mid)}
+       
+        
         {renderLine(att)}
+        {renderLine(mid)}
+        {renderLine(def)}
+        {renderLine(gk)}
+       
+        </ImageBackground>
         </View>
         <View style={styles.bench}>
-          {bench.map((p) => {
+          {bench.map((p: { element: Key | null | undefined; }) => {
             const details = getPlayerDetails(p);
             if (!details) return null;
-            const imageUrl = `https://resources.premierleague.com/premierleague/photos/players/110x140/${details.opta_code}.png`;
+            const imageUrl = `https://resources.premierleague.com/premierleague25/photos/players/110x140/${details.photo.replace('.jpg', '.png')}`;
             return (
               <View key={p.element} style={styles.benchPlayer}>
                 <Image
@@ -128,14 +143,19 @@ const styles = StyleSheet.create({
   header: { fontSize: 18, marginVertical: 12, fontWeight: "bold" },
   subHeader: { fontSize: 16, marginTop: 20, marginBottom: 8 },
   line: { flexDirection: "row", justifyContent: "center", marginVertical: 8 },
-  player: { alignItems: "center", marginHorizontal: 6 },
-  playerImage: { minWidth: 60, height: 80, borderRadius: 4, backgroundColor: "#ddd" },
+  player: { alignItems: "center", marginHorizontal: 6 ,backgroundColor: "rgba(0, 227, 235, 0.18)", borderRadius: "13px"},
+  playerImage: { minWidth: 60, height: 60, borderRadius: 4,  },
   playerName: { fontSize: 12, textAlign: "center" },
+  playerDetail:{ flex:1, alignItems: "center", justifyContent:"center" ,backgroundColor:"#FFF",   borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 13,
+    borderBottomLeftRadius: 13, width:"100%", paddingTop:3,paddingBottom:7, paddingLeft:10,paddingRight:10},
   playerPoints: { fontSize: 11, color: "#333" },
-  bench: { flexDirection: "row", justifyContent: "space-around", backgroundColor:"#333", borderRadius:15, padding:15 },
-  benchPlayer: { alignItems: "center" },
-  benchImage: { width: 50, height: 70, borderRadius: 4 },
-  benchName: { fontSize: 10, color: "#666" },
-  Mainteam: {backgroundColor: "#019C44" , borderRadius:15,},
-  startingxi:{ paddingLeft:15,paddingRight:15}
+  bench: { flexDirection: "row",  width:"100%", justifyContent:"space-around", borderRadius:15, backgroundColor:"#00D595",paddingTop:24, paddingBottom:24},
+  benchPlayer: { alignItems: "center" , padding:5, backgroundColor:"rgba(255,255,255,0.50)",  borderRadius: 8 ,},
+  benchImage: { width: 40, height: 60, },
+  benchName: { fontSize: 10, color: "#000" },
+  Mainteam: { height:"100%", width:"100%" },
+  startingxi:{ paddingLeft:15,paddingRight:15,flex:1,}, 
+  myTeam:{ backgroundColor: "#019C44" ,borderRadius:15,overflow:"hidden"}
 });
