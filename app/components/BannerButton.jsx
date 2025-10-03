@@ -15,11 +15,11 @@ export default function BannerButton() {
         <Text style={styles.title}>Check this out!</Text>
         <Text style={styles.subtitle}>Go to the next page</Text>
       </View>
-      {/* <Image
-        source={require("../assets/banner-image.png")} // your image
+      <Image
+        source={require("./../../assets/images/banner-image.png")} // your image
         style={styles.image}
         resizeMode="contain"
-      /> */}
+      />
     </TouchableOpacity>
   );
 }

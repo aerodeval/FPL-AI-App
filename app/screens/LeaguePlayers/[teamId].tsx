@@ -1,13 +1,18 @@
 import { FplService } from "@/app/api/fplService";
 import { Button } from "@react-navigation/elements";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TeamId() {
-  const { teamId, userId } = useLocalSearchParams();
+  const { teamId: teamIdParam, userId: userIdParam } = useLocalSearchParams();
+  const route = useRoute<any>();
+  const navigation: any = useNavigation();
+  const teamId = (route.params as any)?.teamId ?? teamIdParam;
+  const userId = (route.params as any)?.userId ?? userIdParam;
   const {
     data: teamData,
     isLoading: teamLoading,
@@ -47,10 +52,7 @@ export default function TeamId() {
           <Text style={styles.cardText}>Total Points: {player?.total}</Text>
           <Text style={styles.cardText}>GW Points: {player?.event_total}</Text></View>
 
-          <Button   onPress={() => router.push({
-                pathname: "/screens/TeamPlayers/[teamPlayers]",
-                params: { teamPlayers: `${player?.entry}-${userData?.current_event}`, team_id: player?.entry, gw_id: userData?.current_event },
-              })
+          <Button   onPress={() => navigation.navigate("TeamPlayers", { teamPlayers: `${player?.entry}-${userData?.current_event}`, team_id: player?.entry, gw_id: userData?.current_event })
               }> View</Button>
           </View>
      

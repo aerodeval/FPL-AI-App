@@ -1,5 +1,6 @@
 // app/team/[id].tsx
 import { FplService } from "@/app/api/fplService";
+import { useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { Key } from "react";
@@ -15,7 +16,10 @@ const elementTypes = {
 };
 
 export default function TeamPlayers() {
-  const { team_id, gw_id } = useLocalSearchParams();
+  const { team_id: teamIdParam, gw_id: gwIdParam } = useLocalSearchParams();
+  const route = useRoute<any>();
+  const team_id = (route.params as any)?.team_id ?? teamIdParam;
+  const gw_id = (route.params as any)?.gw_id ?? gwIdParam;
   const normalizedTeamId = Array.isArray(team_id) ? team_id[0] : team_id;
   const normalizedGwId = Array.isArray(gw_id) ? gw_id[0] : gw_id;
 
