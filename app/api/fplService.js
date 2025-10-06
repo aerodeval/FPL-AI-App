@@ -15,7 +15,7 @@ export const FplService = {
         return fetchJson(`${commonUrl}/entry/${userId}`)
    },
 
-   getTeamData: async (leagueId)=>{
+    getTeamData: async (leagueId)=>{
     return fetchJson(`${commonUrl}/leagues-classic/${leagueId}/standings`)
    }
 ,
@@ -25,8 +25,5 @@ export const FplService = {
    getPlayerTransfers: async (team_id)=>{
     return fetchJson(`${commonUrl}/entry/${team_id}/transfers/`)
    }
-
-
-
 
 };

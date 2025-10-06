@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import {
+  Button,
   LayoutAnimation,
   Platform,
   ScrollView,
@@ -22,21 +23,21 @@ if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental
 }
 
 export default function TeamId() {
-  const [expandedTeam, setExpandedTeam] = useState(null);
+  const [expandedTeam, setExpandedTeam] = useState<number | null>(null);
 
-  const toggleTransfers = (teamId) => {
+  const toggleTransfers = (teamId: number) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpandedTeam((prev) => (prev === teamId ? null : teamId));
   };
 
   const { teamId: teamIdParam, userId: userIdParam } = useLocalSearchParams();
-  const route = useRoute();
-  const navigation = useNavigation();
+  const route = useRoute() as any;
+  const navigation = useNavigation<any>();
 
   const teamId = route.params?.teamId ?? teamIdParam;
   const userId = route.params?.userId ?? userIdParam;
 
-  // 🧠 Fetch team standings data
+  //  Fetch team standings data
   const {
     data: teamData,
     isLoading: teamLoading,
@@ -47,7 +48,7 @@ export default function TeamId() {
     staleTime: 1000 * 60 * 8,
   });
 
-  // 🧠 Fetch user info (for current event)
+  //  Fetch user info (for current event)
   const {
     data: userData,
     isLoading: userLoading,
@@ -66,7 +67,7 @@ export default function TeamId() {
 
         {!teamLoading &&
           !teamError &&
-          (teamData?.standings?.results ?? []).map((player) => (
+          (teamData?.standings?.results ?? []).map((player: any) => (
             <View
               key={player?.entry ?? player?.id ?? String(player?.rank)}
               style={styles.card}
@@ -84,7 +85,7 @@ export default function TeamId() {
 
               {/* Buttons */}
               <View style={styles.buttonRow}>
-                {/* <Button
+                <Button
                   title="View Team"
                   onPress={() =>
                     navigation.navigate("TeamPlayers", {
@@ -93,7 +94,7 @@ export default function TeamId() {
                       gw_id: userData?.current_event,
                     })
                   }
-                /> */}
+                />
 
                 <TouchableOpacity onPress={() => toggleTransfers(player.entry)}>
                   <Text style={styles.transferToggle}>

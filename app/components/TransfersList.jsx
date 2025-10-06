@@ -4,7 +4,7 @@ import React from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
 
 export default function TransfersList({ team_id }) {
-  // ✅ Fetch transfers for the team
+
   const {
     data: userTransfer,
     isLoading: userTransferLoading,
@@ -12,11 +12,11 @@ export default function TransfersList({ team_id }) {
   } = useQuery({
     queryKey: ["userTransfer", team_id],
     queryFn: () => FplService.getPlayerTransfers(team_id),
-    enabled: !!team_id, // 🔒 only fetch if team_id is valid
-    staleTime: 1000 * 60 * 10, // 10 min
+    enabled: !!team_id,
+    staleTime: 1000 * 60 * 10, 
   });
 
-  // ✅ Fetch bootstrap data (for player names)
+
   const {
     data: bootstrapData,
     isLoading: bootstrapLoading,
@@ -24,10 +24,9 @@ export default function TransfersList({ team_id }) {
   } = useQuery({
     queryKey: ["bootstrap"],
     queryFn: () => FplService.getBootstrapData(),
-    staleTime: 1000 * 60 * 60, // 1 hour
+    staleTime: 1000 * 60 * 60,
   });
 
-  // ⏳ Loading state
   if (userTransferLoading || bootstrapLoading) {
     return (
       <View style={styles.center}>
@@ -37,19 +36,20 @@ export default function TransfersList({ team_id }) {
     );
   }
 
-  // ❌ Error handling
+ 
   if (userTransferError || bootstrapError) {
     return (
       <View style={styles.center}>
-                <Text>{userTransfer}</Text>
-        <Text style={styles.errorText}>Error fetching transfer data</Text>
+        <Text style={styles.errorText}>
+          {userTransferError?.message || bootstrapError?.message || "Error fetching transfer data"}
+        </Text>
       </View>
     );
   }
 
   const transfers = userTransfer ?? [];
 
-  // 🧩 Map element IDs → names
+
   const playerMap = {};
   bootstrapData?.elements?.forEach((el) => {
     playerMap[el.id] = el.web_name;
@@ -64,7 +64,7 @@ export default function TransfersList({ team_id }) {
     );
   }
 
-  // ✅ Render transfer list
+
   return (
     <FlatList
       data={transfers}

@@ -46,6 +46,36 @@ app.get("/api/entry/:team_id", async (req, res) => {
   }
 });
 
+// Proxy for transfers by team
+app.get("/api/entry/:team_id/transfers/", async (req, res) => {
+  try {
+    const { team_id } = req.params;
+    const response = await fetch(`https://fantasy.premierleague.com/api/entry/${team_id}/transfers/`);
+    if (!response.ok) {
+      return res.status(response.status).json({ error: `Upstream error ${response.status}` });
+    }
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch transfer data" });
+  }
+});
+
+// Same route without trailing slash to avoid 404s from client variants
+app.get("/api/entry/:team_id/transfers", async (req, res) => {
+  try {
+    const { team_id } = req.params;
+    const response = await fetch(`https://fantasy.premierleague.com/api/entry/${team_id}/transfers/`);
+    if (!response.ok) {
+      return res.status(response.status).json({ error: `Upstream error ${response.status}` });
+    }
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch transfer data" });
+  }
+});
+
 
 app.get("/api/leagues-classic/:league_id/standings/", async (req, res) => {
   try {
