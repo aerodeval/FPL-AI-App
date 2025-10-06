@@ -1,15 +1,9 @@
 import { FplService } from "@/app/api/fplService";
-import { useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
-import { useLocalSearchParams } from "expo-router";
 import React from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
 
-export default function TransfersList() {
-  const { team_id: teamIdParam } = useLocalSearchParams();
-  const route = useRoute();
-  const team_id = route.params?.team_id ?? teamIdParam;
-
+export default function TransfersList({ team_id }) {
   // ✅ Fetch transfers for the team
   const {
     data: userTransfer,
@@ -18,6 +12,7 @@ export default function TransfersList() {
   } = useQuery({
     queryKey: ["userTransfer", team_id],
     queryFn: () => FplService.getPlayerTransfers(team_id),
+    enabled: !!team_id, // 🔒 only fetch if team_id is valid
     staleTime: 1000 * 60 * 10, // 10 min
   });
 
@@ -46,28 +41,30 @@ export default function TransfersList() {
   if (userTransferError || bootstrapError) {
     return (
       <View style={styles.center}>
-        <Text style={styles.errorText}>Error fetching data</Text>
+                <Text>{userTransfer}</Text>
+        <Text style={styles.errorText}>Error fetching transfer data</Text>
       </View>
     );
   }
 
-  // 🧩 Map element IDs to names from bootstrap data
+  const transfers = userTransfer ?? [];
+
+  // 🧩 Map element IDs → names
   const playerMap = {};
   bootstrapData?.elements?.forEach((el) => {
     playerMap[el.id] = el.web_name;
   });
 
-  const transfers = userTransfer ?? [];
-
   if (transfers.length === 0) {
     return (
       <View style={styles.center}>
+
         <Text style={styles.text}>No transfers made yet</Text>
       </View>
     );
   }
 
-  // ✅ Render each transfer
+  // ✅ Render transfer list
   return (
     <FlatList
       data={transfers}
