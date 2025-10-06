@@ -36,17 +36,19 @@ export default function TabsScreen() {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "#22c55e",
-        tabBarStyle: { backgroundColor: "#0f172a", borderTopColor: "#1f2937" },
+        tabBarStyle: { backgroundColor: "#0f172a", borderTopColor: "#1f2937", borderTopLeftRadius:15, borderTopRightRadius:15, },
       }}
       initialRouteName="Squad"
     >
       <Tab.Screen
+         
         name="Squad"
         component={SquadStack}
         options={{
           title: "My Team",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="people" size={size} color={color} />
+            <Ionicons name="shirt-outline" size={size} color={color} />
+            
           ),
         }}
       />
@@ -66,7 +68,7 @@ export default function TabsScreen() {
         options={{
           title: "News",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="newspaper" size={size} color={color} />
+            <Ionicons name="newspaper-outline" size={size} color={color} />
           ),
         }}
       />

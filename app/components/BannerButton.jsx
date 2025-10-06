@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router"; // or React Navigation
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function BannerButton() {
   const router = useRouter();
@@ -12,11 +12,10 @@ export default function BannerButton() {
   return (
     <TouchableOpacity style={styles.banner} onPress={handlePress}>
       <View style={styles.textContainer}>
-        <Text style={styles.title}>Check this out!</Text>
-        <Text style={styles.subtitle}>Go to the next page</Text>
+        <Text style={styles.title}>Check out the best transfers recommended by FutAI</Text>
       </View>
       <Image
-        source={require("./../../assets/images/banner-image.png")} // your image
+        source={require("./../../assets/images/banner-img.png")} 
         style={styles.image}
         resizeMode="contain"
       />
@@ -29,25 +28,28 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "rgba(255, 255, 255, 0.9)", // semi-transparent white
-    padding: 16,
+    paddingLeft: 16,
+    paddingRight:16,
     borderRadius: 12,
-    marginHorizontal: 16,
-    marginVertical: 8,
+    marginTop:51,
+    marginBottom: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3, // for Android shadow
+    backgroundColor:"#00D595",
+    maxHeight:84
   },
   textContainer: {
     flex: 1,
+    minWidth:80,
     paddingRight: 10, // space between text and image
   },
   title: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
+    color: "#FFF",
+    fontSize:10,
+    fontWeight:700
   },
   subtitle: {
     fontSize: 12,
@@ -55,8 +57,9 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   image: {
-    width: 60,
-    height: 60,
-    borderRadius: 8,
+    maxWidth: 233,
+    minHeight: 135,
+    bottom:25,
+  
   },
 });

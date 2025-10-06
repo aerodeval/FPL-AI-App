@@ -36,7 +36,7 @@ export default function TeamScreen() {
                      <View className="flex flex-col gap-1">
                      <Text>Rank:</Text>
             <Text>
-            {item.rank_count}</Text></View> 
+            {item.entry_rank}</Text></View> 
             <Text>{item.name}</Text>
             <Button   onPress={() => router.push({
                 pathname: "/screens/LeaguePlayers/[teamId]",

@@ -56,7 +56,7 @@ export default function Leagues() {
             <View style={{ padding: 12, backgroundColor: "#212121", borderRadius: 8, marginBottom: 8 }} className="flex flex-row gap-2 justify-between items-center">
               <View className="flex flex-col gap-1">
                 <Text className="text-white text-center">Rank</Text>
-                <Text className="text-white text-center">{item.rank_count}</Text>
+                <Text className="text-white text-center">{item.entry_rank}</Text>
               </View>
               <Text className="text-white text-center">{item.name}</Text>
               <Button

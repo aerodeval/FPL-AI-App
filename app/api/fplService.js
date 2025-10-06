@@ -21,7 +21,11 @@ export const FplService = {
 ,
    getTeamPlayers: async (team_id,gw_id)=>{
     return fetchJson(`${commonUrl}/entry/${team_id}/event/${gw_id}/picks`)
+   },
+   getPlayerTranfers: async (team_id)=>{
+    return fetchJson(`${commonUrl}/entry/${team_id}/transfers/`)
    }
+
 
 
 

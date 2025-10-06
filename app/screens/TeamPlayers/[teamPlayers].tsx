@@ -6,7 +6,6 @@ import { useLocalSearchParams } from "expo-router";
 import { Key } from "react";
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import BannerButton from './../../components/BannerButton';
 
 const elementTypes = {
   1: "goalkeeper",
@@ -85,7 +84,7 @@ export default function TeamPlayers() {
             />
             <View style={styles.playerDetail}>
             <Text style={styles.playerName}>{details.web_name}</Text>
-            <Text style={styles.playerPoints}>GW: {details.event_points}</Text>
+            <Text style={styles.playerPoints}> {details.event_points}</Text>
           </View>
           </View>
         );
@@ -100,7 +99,7 @@ export default function TeamPlayers() {
           Entry: {normalizedTeamId} | GW: {normalizedGwId}
         </Text> */}
 
-    <BannerButton></BannerButton>
+
 
     <View style={styles.myTeam}>
 <View style={styles.startingxi}>
@@ -154,7 +153,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 5,
     borderBottomRightRadius: 13,
     borderBottomLeftRadius: 13, width:"100%", paddingTop:3,paddingBottom:7, paddingLeft:10,paddingRight:10},
-  playerPoints: { fontSize: 11, color: "#333" },
+  playerPoints: { fontSize: 11, fontWeight:700, color: "#000" },
   bench: { flexDirection: "row",  width:"100%", justifyContent:"space-around", borderRadius:15, backgroundColor:"#00D595",paddingTop:24, paddingBottom:24},
   benchPlayer: { alignItems: "center" , padding:5, backgroundColor:"rgba(255,255,255,0.50)",  borderRadius: 8 ,},
   benchImage: { width: 40, height: 60, },
