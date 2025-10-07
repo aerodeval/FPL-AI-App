@@ -48,14 +48,15 @@ export default function TransfersList({ team_id }) {
   }
 
   const transfers = userTransfer ?? [];
-
+  const highestEvent= Math.max(...transfers.map(t=>t.event));
+  const latestTransfers= transfers.filter(t=>t.event ===highestEvent);
 
   const playerMap = {};
   bootstrapData?.elements?.forEach((el) => {
     playerMap[el.id] = el.web_name;
   });
 
-  if (transfers.length === 0) {
+  if (latestTransfers.length === 0) {
     return (
       <View style={styles.center}>
 
@@ -67,7 +68,7 @@ export default function TransfersList({ team_id }) {
 
   return (
     <FlatList
-      data={transfers}
+      data={latestTransfers}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({ item }) => (
         <View style={styles.transferCard}>
