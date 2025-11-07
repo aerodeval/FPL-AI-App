@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { useEffect } from "react";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTeamStore } from "../../store/useTeam";
 
@@ -44,31 +44,49 @@ export default function Leagues() {
   const leagues = userData?.leagues?.classic ?? [];
 
   return (
-    <SafeAreaView className="flex-1 bg-slate-900 items-center justify-center">
-      <View className="w-full px-4">
-        <Text className="text-white text-xl font-semibold mb-3 text-center">Your Leagues</Text>
+    <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: "center", justifyContent: "center", padding: 8 }}>
+      <View style={{ width: "100%", marginTop: 4 }}>
+        <Text className="text-black text-xl font-semibold mb-3 text-left">
+          {userData.player_first_name}&apos;s Leagues
+        </Text>
+
         <FlatList
           data={leagues}
           keyExtractor={(item: any) => String(item.id)}
-          style={{ width: "100%" }}
-          contentContainerStyle={{ alignItems: "stretch" }}
-          renderItem={({ item }: any) => (
-            <View style={{ padding: 12, backgroundColor: "#212121", borderRadius: 8, marginBottom: 8 }} className="flex flex-row gap-2 justify-between items-center">
-              <View className="flex flex-col gap-1">
-                <Text className="text-white text-center">Rank</Text>
-                <Text className="text-white text-center">{item.entry_rank}</Text>
-              </View>
-              <Text className="text-white text-center">{item.name}</Text>
+        renderItem={({ item }: any) => (
+          <View
+            style={{
+              padding: 12,
+              backgroundColor: "#212121",
+              borderRadius: 4,
+              marginBottom: 2,
+            }}
+            className="flex flex-row justify-between items-center gap-6"
+          >
+     
+  
+            <Text className="text-white text-left flex-1 ">{item.name}</Text>
+            <View className="flex flex-col items-start">
+              <Text className="text-white text-left">Rank</Text>
+              <Text className="text-white text-left">{item.entry_rank}</Text>
               <Button
-                onPress={() => navigation.navigate("LeaguePlayers", { teamId: item.id, userId: userData?.id })}
-              >
-                View
-              </Button>
+           
+           onPress={() =>
+             navigation.navigate("LeaguePlayers", {
+               teamId: item.id,
+               userId: userData?.id,
+             })
+           }
+         >View</Button>
+           
             </View>
-          )}
-        />
-      </View>
-    </SafeAreaView>
+        
+          </View>
+        )}
+      />
+    </View>
+  </ScrollView>
+  
   );
 }
 
