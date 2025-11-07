@@ -36,12 +36,12 @@ export default function TabsScreen() {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "#22c55e",
-        tabBarStyle: { backgroundColor: "#0f172a", borderTopColor: "#1f2937", borderTopLeftRadius:15, borderTopRightRadius:15, },
+        tabBarStyle: { backgroundColor: "#0f172a", borderTopColor: "#1f2937", height:60,  },
       }}
       initialRouteName="Squad"
     >
       <Tab.Screen
-         
+ 
         name="Squad"
         component={SquadStack}
         options={{

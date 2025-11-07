@@ -1,9 +1,11 @@
 import { FplService } from "@/app/api/fplService";
 import BannerButton from "@/app/components/BannerButton";
 import { useQuery } from "@tanstack/react-query";
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from "expo-router";
 import { useEffect } from "react";
 import { Dimensions, Image, ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTeamStore } from "../../store/useTeam";
 
@@ -70,7 +72,7 @@ export default function Squad() {
 
   const getPlayerDetails = (player: any) =>
     (bootstrapData as any)?.elements?.find((p: any) => p.id === player.element);
-
+  
   const renderLine = (players: any[]) => (
     <View style={styles.line}>
       {players.map((p) => {
@@ -98,7 +100,11 @@ export default function Squad() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+      <ScrollView >
+      <LinearGradient
+  colors={['#fe69bb', '#dd43c0', '#9d3bc4', '#005205', '#324879', '#881c3a', '#430053']}
+  style={{ flex: 1, paddingHorizontal: 12, justifyContent: 'center', paddingBottom:20 }}
+>
       <BannerButton></BannerButton>
         <View style={styles.myTeam}>
           <View style={styles.startingxi}>
@@ -127,15 +133,16 @@ export default function Squad() {
             })}
           </View>
         </View>
+        </LinearGradient>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, flexDirection:"column", justifyContent:"center", backgroundColor: "#fff", paddingHorizontal: 12 },
+  container: { flex: 1, flexDirection:"column", justifyContent:"center",          },
   loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
-  header: { fontSize: 18, marginVertical: 12, fontWeight: "bold" },
+  header: { fontSize: 18, marginVertical: 12, fontWeight: "bold", fontFamily: 'Jolly Lodger' },
   subHeader: { fontSize: 16, marginTop: 20, marginBottom: 8 },
   line: { flexDirection: "row", justifyContent: "center", marginVertical: 8 ,  transform: [{ scale: width/410 }]},
   player: {   alignItems: "center",
@@ -149,7 +156,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3, },
   playerImage: { minWidth: 60, height: 60, borderRadius: 4,  },
-  playerName: { fontSize: 12, textAlign: "center" },
+  playerName: { fontSize: 12, textAlign: "center"  ,fontFamily: 'Inter'},
   playerDetail:{ flex:1, alignItems: "center", justifyContent:"center" ,backgroundColor:"#FFF",   borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     borderBottomRightRadius: 13,
@@ -158,7 +165,7 @@ const styles = StyleSheet.create({
   bench: { flexDirection: "row",  width:"100%", justifyContent:"space-around", borderRadius:15, backgroundColor:"#00D595",paddingTop:24, paddingBottom:24},
   benchPlayer: { alignItems: "center" , padding:5, backgroundColor:"rgba(255,255,255,0.50)",  borderRadius: 8 ,},
   benchImage: { width: 40, height: 60, },
-  benchName: { fontSize: 10, color: "#000" },
+  benchName: { fontSize: 10, color: "#000" ,  fontFamily: 'Inter'},
   Mainteam: { height:"100%", width:"100%" },
   startingxi:{ paddingLeft:15,paddingRight:15,flex:1,}, 
   myTeam:{ backgroundColor: "#019C44" ,borderRadius:15,overflow:"hidden"}

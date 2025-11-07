@@ -6,7 +6,7 @@ export default function BannerButton() {
   const router = useRouter();
 
   const handlePress = () => {
-    router.push("/nextpage"); // replace with your route
+    router.push("/screens/Tabs/AI"); // replace with your route
   };
 
   return (
@@ -39,17 +39,18 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3, // for Android shadow
     backgroundColor:"#00D595",
-    maxHeight:84
+    maxHeight:84,
+
   },
   textContainer: {
     flex: 1,
-    minWidth:80,
-    paddingRight: 10, // space between text and image
+    minWidth:81,
+    paddingRight: 3, // space between text and image
   },
   title: {
     color: "#FFF",
-    fontSize:10,
-    fontWeight:700
+    fontSize:11,
+    fontWeight:700,     fontFamily: 'Inter'
   },
   subtitle: {
     fontSize: 12,
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
     maxWidth: 233,
     minHeight: 135,
     bottom:25,
+    right:20
   
   },
 });
