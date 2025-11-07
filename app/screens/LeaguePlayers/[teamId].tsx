@@ -60,6 +60,7 @@ export default function TeamId() {
     staleTime: 1000 * 60 * 8,
   });
 
+
   return (
     <LinearGradient
       colors={[colors.gradientStart, colors.gradientEnd]}
@@ -68,6 +69,21 @@ export default function TeamId() {
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={typography.tagline}>League Standings</Text>
+
+          {/* Generate Aggregate Team Button */}
+          <TouchableOpacity
+            style={styles.aggregateButton}
+            onPress={() =>
+              navigation.navigate("AggregateTeam", {
+                teamId,
+                userId,
+              })
+            }
+            disabled={teamLoading || !teamData}
+          >
+            <Ionicons name="people-outline" size={20} color="#fff" />
+            <Text style={styles.aggregateButtonText}>Generate Safe Team (Top 10)</Text>
+          </TouchableOpacity>
 
           {teamLoading && <Text style={typography.caption}>Loading standings...</Text>}
           {!teamLoading && teamError && (
@@ -241,5 +257,27 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 10,
     padding: 10,
+  },
+  aggregateButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 22,
+    backgroundColor: "#3f1052",
+    marginVertical: 12,
+    shadowColor: "#000",
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 5,
+  },
+  aggregateButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+    letterSpacing: 0.5,
   },
 });

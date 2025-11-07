@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AggregateTeam from "./screens/LeaguePlayers/AggregateTeam";
 import LeaguePlayers from "./screens/LeaguePlayers/[teamId]";
 import AI from "./screens/Tabs/AI";
 import Leagues from "./screens/Tabs/Leagues";
@@ -26,6 +27,7 @@ function LeaguesStack() {
       <Stack.Screen name="LeaguesRoot" component={Leagues} />
       <Stack.Screen name="LeaguePlayers" component={LeaguePlayers} />
       <Stack.Screen name="TeamPlayers" component={TeamPlayers} />
+      <Stack.Screen name="AggregateTeam" component={AggregateTeam} />
     </Stack.Navigator>
   );
 }
