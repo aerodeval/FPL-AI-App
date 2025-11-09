@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AggregateTeam from "./screens/LeaguePlayers/AggregateTeam";
 import LeaguePlayers from "./screens/LeaguePlayers/[teamId]";
 import AI from "./screens/Tabs/AI";
@@ -33,12 +34,20 @@ function LeaguesStack() {
 }
 
 export default function TabsScreen() {
+  const insets = useSafeAreaInsets();
+  
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "#22c55e",
-        tabBarStyle: { backgroundColor: "#0f172a", borderTopColor: "#1f2937", height:60,  },
+        tabBarStyle: { 
+          backgroundColor: "#0f172a", 
+          borderTopColor: "#1f2937", 
+          height: 60 + insets.bottom,
+          paddingBottom: insets.bottom,
+          paddingTop: 8,
+        },
       }}
       initialRouteName="Squad"
     >

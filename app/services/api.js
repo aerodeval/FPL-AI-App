@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 
 // Production API URL - Replace with your Render URL after deployment
 // Example: 'https://your-app-name.onrender.com/api'
-const PRODUCTION_API_URL = null; // Set this to your Render URL, e.g., 'https://barber-api.onrender.com/api'
+const PRODUCTION_API_URL = 'https://fpl-ai-app.onrender.com/api'; // Production API URL
 
 const getApiUrl = () => {
   // If production URL is set, use it for all platforms

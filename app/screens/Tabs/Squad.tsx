@@ -6,7 +6,7 @@ import { router } from "expo-router";
 import { useEffect } from "react";
 import { Dimensions, Image, ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
 
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTeamStore } from "../../store/useTeam";
 
 const elementTypes: Record<number, string> = {
@@ -18,6 +18,7 @@ const elementTypes: Record<number, string> = {
 const { width } = Dimensions.get('window');
 export default function Squad() {
   const { teamId } = useTeamStore();
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (!teamId) router.replace("/enter");
@@ -45,8 +46,17 @@ export default function Squad() {
     staleTime: 1000 * 60 * 10,
   });
 
+
+  const { data: fixturesData, isLoading: fixturesLoading, error: fixturesError } = useQuery({
+    queryKey: ["fixtures", currentEvent],
+    queryFn: () => FplService.getFixtureData(),
+    enabled: Boolean(currentEvent),
+    staleTime: 1000 * 60 * 10,
+  });
+
+  
   if (!teamId) return null;
-  if (userLoading || teamLoading || bootstrapLoading) {
+  if (userLoading || teamLoading || bootstrapLoading || fixturesLoading) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
         <Text className="text-white">Loading team...</Text>
@@ -54,13 +64,16 @@ export default function Squad() {
     );
   }
 
-  if (userError || teamError || bootstrapError) {
+  if (userError || teamError || bootstrapError || fixturesError) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
         <Text className="text-white">Error loading data.</Text>
       </SafeAreaView>
     );
   }
+
+
+
 
   const starters = (userTeam as any).picks.filter((p: any) => p.position <= 11);
   const bench = (userTeam as any).picks.filter((p: any) => p.position > 11);
@@ -73,14 +86,57 @@ export default function Squad() {
   const getPlayerDetails = (player: any) =>
     (bootstrapData as any)?.elements?.find((p: any) => p.id === player.element);
   
+  const getFixtureInfo = (player: any) => {
+    if (!fixturesData) return null;
+  
+    const details = getPlayerDetails(player);
+    if (!details) return null;
+  
+    const teamId = details.team;
+    const teams = (bootstrapData as any)?.teams || [];
+    const currentGW = currentEvent;
+  
+    // ✅ Filter fixtures by current gameweek first
+    const gwFixtures = (fixturesData as any).filter(
+      (f: any) => f.event === currentGW
+    );
+  
+    // ✅ Then find fixture involving this team
+    const fixture = gwFixtures.find(
+      (f: any) => f.team_h === teamId || f.team_a === teamId
+    );
+  
+    if (!fixture) return null;
+  
+    const isHome = fixture.team_h === teamId;
+    const opponentId = isHome ? fixture.team_a : fixture.team_h;
+    const opponent = teams.find((t: any) => t.id === opponentId);
+  
+    return {
+      opponentName: opponent?.short_name || "TBD",
+      isHome,
+      finished: fixture.finished,
+      started: fixture.started,
+    };
+  };
+  
   const renderLine = (players: any[]) => (
     <View style={styles.line}>
       {players.map((p) => {
         const details = getPlayerDetails(p);
         if (!details) return null;
+  
+        const fixture = getFixtureInfo(p);
         const imageUrl = details.photo
           ? `https://resources.premierleague.com/premierleague25/photos/players/110x140/${details.photo.replace('.jpg', '.png')}`
           : 'https://resources.premierleague.com/premierleague25/photos/players/110x140/placeholder.png';
+  
+        // mark player’s points display
+        let displayPoints = details.event_points;
+        if (details.minutes === 0 && details.event_points === 0) {
+          displayPoints = "0*"; // didn't play
+        }
+  
         return (
           <View key={p.element} style={styles.player}>
             <Image
@@ -90,20 +146,32 @@ export default function Squad() {
             />
             <View style={styles.playerDetail}>
               <Text style={styles.playerName}>{details.web_name}</Text>
-              <Text style={styles.playerPoints}>{details.event_points}</Text>
+          
+              <Text style={styles.playerPoints}>
+  {fixture && fixture.opponentName && !fixture.finished 
+    ? `${fixture.opponentName} ${fixture.isHome ? "(H)" : "(A)"} `
+    : displayPoints}
+
+</Text>
+
             </View>
           </View>
         );
       })}
     </View>
   );
-
+  // Tab bar height is 60, plus bottom safe area inset
+  const bottomPadding = 60 + insets.bottom;
+  
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView >
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+      <ScrollView 
+        // contentContainerStyle={{ paddingBottom: bottomPadding }}
+        showsVerticalScrollIndicator={false}
+      >
       <LinearGradient
   colors={['#fe69bb', '#dd43c0', '#9d3bc4', '#005205', '#324879', '#881c3a', '#430053']}
-  style={{ flex: 1, paddingHorizontal: 12, justifyContent: 'center', paddingBottom:20 }}
+  style={styles.gradient}
 >
       <BannerButton></BannerButton>
         <View style={styles.myTeam}>
@@ -126,8 +194,9 @@ export default function Squad() {
               const imageUrl = `https://resources.premierleague.com/premierleague25/photos/players/110x140/${details.photo.replace('.jpg', '.png')}`;
               return (
                 <View key={p.element} style={styles.benchPlayer}>
-                  <Image source={{ uri: imageUrl }} style={styles.benchImage} resizeMode="contain" />
+                  <Image source={{ uri: imageUrl }} style={styles.playerImage} resizeMode="contain" />
                   <Text style={styles.benchName}>{details.web_name}</Text>
+                  <Text style={styles.playerPoints}>{details.event_points}</Text>
                 </View>
               );
             })}
@@ -140,7 +209,8 @@ export default function Squad() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, flexDirection:"column", justifyContent:"center",          },
+  container: { flex: 1 },
+  gradient: { paddingHorizontal: 12, paddingBottom: 20 },
   loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
   header: { fontSize: 18, marginVertical: 12, fontWeight: "bold", fontFamily: 'Jolly Lodger' },
   subHeader: { fontSize: 16, marginTop: 20, marginBottom: 8 },
@@ -157,6 +227,7 @@ const styles = StyleSheet.create({
     elevation: 3, },
   playerImage: { minWidth: 60, height: 60, borderRadius: 4,  },
   playerName: { fontSize: 12, textAlign: "center"  ,fontFamily: 'Inter'},
+  opponentText: { fontSize: 10, textAlign: "center", color: "#666", fontFamily: 'Inter', marginTop: 2 },
   playerDetail:{ flex:1, alignItems: "center", justifyContent:"center" ,backgroundColor:"#FFF",   borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     borderBottomRightRadius: 13,

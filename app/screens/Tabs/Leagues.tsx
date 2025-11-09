@@ -5,13 +5,14 @@ import { useQuery } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useEffect } from "react";
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View, } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View, } from "react-native";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTeamStore } from "../../store/useTeam";
 
 export default function Leagues() {
   const { teamId } = useTeamStore();
   const navigation: any = useNavigation();
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (!teamId) router.replace("/enter");
@@ -47,24 +48,32 @@ export default function Leagues() {
   }
 
   const leagues = userData?.leagues?.classic ?? [];
+  
+  // Tab bar height is 60, plus bottom safe area inset
+  const bottomPadding = 60 + insets.bottom;
+
+  const renderHeader = () => (
+    <View style={{ width: "100%", marginTop: 4, marginBottom: 12 }}>
+      <Text style={typography.tagline} className="mb-3 text-left">
+        {userData?.player_first_name
+          ? userData.player_first_name.charAt(0).toUpperCase() + userData.player_first_name.slice(1).toLowerCase()
+          : "Your"}'s leagues
+      </Text>
+    </View>
+  );
 
   return (
-    <LinearGradient
-    colors={['#8d004f',   '#430053']}
-    style={{ flex: 1, paddingHorizontal: 12, justifyContent: 'center', paddingBottom:20 }}
-  >
-    <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: "center", justifyContent: "center", padding: 8, backgroundColor:"" }}>
-      <View style={{ width: "100%", marginTop: 4 }}>
-        <Text style={typography.tagline} className="mb-3 text-left">
-        {userData?.player_first_name
-  ? userData.player_first_name.charAt(0).toUpperCase() + userData.player_first_name.slice(1).toLowerCase()
-  : "Your"}&apos;s leagues
-        </Text>
-
+    <SafeAreaView style={{ flex: 1 }} edges={['top', 'left', 'right']}>
+      <LinearGradient
+        colors={['#8d004f', '#430053']}
+        style={{ flex: 1, paddingHorizontal: 12 }}
+      >
         <FlatList
           data={leagues}
           keyExtractor={(item: any) => String(item.id)}
-        renderItem={({ item }: any) => (
+          ListHeaderComponent={renderHeader}
+          contentContainerStyle={{ paddingBottom: bottomPadding, padding: 8 }}
+          renderItem={({ item }: any) => (
           <TouchableOpacity 
           
           onPress={() =>
@@ -114,14 +123,10 @@ export default function Leagues() {
     
        
           </View></TouchableOpacity>
-        )}
-      />
-    </View>
-  </ScrollView>
-</LinearGradient>
-
-
-  
+          )}
+        />
+      </LinearGradient>
+    </SafeAreaView>
   );
 
 
