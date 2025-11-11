@@ -34,7 +34,7 @@ export default function Leagues() {
   if (isLoading) {
     return (
       <SafeAreaView className="flex-1  items-center justify-center">
-        <Text className="text-white text-center">Loading leagues...</Text>
+        <Text className="text-purple text-center">Loading leagues...</Text>
       </SafeAreaView>
     );
   }
@@ -57,7 +57,7 @@ export default function Leagues() {
       <Text style={typography.tagline} className="mb-3 text-left">
         {userData?.player_first_name
           ? userData.player_first_name.charAt(0).toUpperCase() + userData.player_first_name.slice(1).toLowerCase()
-          : "Your"}'s leagues
+          : "Your"} leagues
       </Text>
     </View>
   );
